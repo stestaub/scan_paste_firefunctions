@@ -7,7 +7,7 @@ exports.requestScan = functions.database.ref('/request/{requestId}')
     .onCreate((snapshot, context) => {
         // Grab the current value of what was written to the Realtime Database.
         const channel = snapshot.child("channel_id").val();
-        return firebaseAdmin.database().ref("/channels/" + channel).once('value').then(
+        return firebaseAdmin.database().ref("/channels/" + channel + "/device_id").once('value').then(
             (channelSnapshot) => {
                 return sendMessage(channelSnapshot.val(), context.params.requestId);
             }
