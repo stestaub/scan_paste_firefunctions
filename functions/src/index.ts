@@ -28,6 +28,7 @@ function sendMessage(registrationToken: string, requestId: string){
             ttl: 600,
             notification: {
                 clickAction:  "OPEN_SCANNER",
+                sound: "default",
             },
             priority: prio
         },
