@@ -25,10 +25,12 @@ function sendMessage(registrationToken: string, requestId: string){
             request_id: requestId
         },
         android: {
+            collapseKey: "scan_request",
             ttl: 600,
             notification: {
                 clickAction:  "OPEN_SCANNER",
                 sound: "default",
+                notificationPriority: "PRIORITY_MAX",
             },
             priority: prio
         },
