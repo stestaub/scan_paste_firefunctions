@@ -3,6 +3,29 @@ import * as firebaseAdmin from 'firebase-admin';
 
 firebaseAdmin.initializeApp();
 
+exports.cleanOldRequests = functions.pubsub.schedule('every 5 minutes')
+    .onRun(() => {
+        const now = new Date();
+        const olderThan = new Date(new Date().setHours(now.getHours() - 1)).toISOString();
+        const itemsToRemove = firebaseAdmin.database().ref("/request").orderByChild('created_at').endAt(olderThan);
+
+        return itemsToRemove.once('value', (snapshot) => {
+            const keys: string[] = [];
+            snapshot.forEach(snap => {
+                keys.push(<string>snap.key);
+            });
+            return deleteRecords(keys);
+        });
+    });
+
+function deleteRecords(keys: string[]) {
+    const data: { [key: string]: any } = {};
+    keys.forEach((k: string) => {
+        data['/request/' + k] = null;
+    });
+    return firebaseAdmin.database().ref().update(data);
+}
+
 exports.requestScan = functions.database.ref('/request/{requestId}')
     .onCreate((snapshot, context) => {
         // Grab the current value of what was written to the Realtime Database.
