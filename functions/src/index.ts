@@ -16,6 +16,7 @@ exports.requestScan = functions.database.ref('/request/{requestId}')
 
 function sendMessage(registrationToken: string, requestId: string){
     const prio: ('high' | 'normal') = 'high';
+    const notificationPriority: ('min' | 'low' | 'default' | 'high' | 'max') = 'max';
     const message = {
         notification: {
             title: "Scan Anfrage",
@@ -25,12 +26,13 @@ function sendMessage(registrationToken: string, requestId: string){
             request_id: requestId
         },
         android: {
-            collapseKey: "scan_request",
             ttl: 600,
             notification: {
+                tag: "scan_request",
                 clickAction:  "OPEN_SCANNER",
-                sound: "default",
-                notificationPriority: "PRIORITY_MAX",
+                defaultSound: true,
+                defaultVibrateTimings: true,
+                priority: notificationPriority,
             },
             priority: prio
         },
