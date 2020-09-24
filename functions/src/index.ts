@@ -55,6 +55,7 @@ function sendMessage(registrationToken: string, requestId: string){
                 clickAction:  "OPEN_SCANNER",
                 defaultSound: true,
                 defaultVibrateTimings: true,
+                channelId: "ch.innodirve.copyscan.ScanRequest",
                 priority: notificationPriority,
             },
             priority: prio
